@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wicks Session</title>
+  </head>
+  <body>
+    <h1>Wicks Chat View:</h1>
+    <input id="message" />
+    <button onclick="sendMessage()">Send</button>
+    <div id="chat"></div>
+  </body>
+  <script>
+    // DOM Elements
+    const chat = document.getElementById("chat");
+    // Create Websocket Conenction
+    const socket = new WebSocket("ws://localhost:3000");
+
+    // Connection Opened
+    socket.addEventListener("open", function (event) {
+      chat.innerHTML += `<p>Connected to WS Server</p>`;
+    });
+
+    // Listen for messages
+    socket.addEventListener("message", function (event) {
+      chat.innerHTML += `<p>Viktor: ${event.data}</p>`;
+    });
+
+    const sendMessage = () => {
+      const message = document.getElementById("message").value;
+      chat.innerHTML += `<p>Wick: ${message}</p>`;
+      socket.send(message);
+    };
+  </script>
+</html>
